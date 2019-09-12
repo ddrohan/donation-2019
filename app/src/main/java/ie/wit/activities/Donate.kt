@@ -1,5 +1,6 @@
 package ie.wit.activities
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -57,7 +58,7 @@ class Donate : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
+        menuInflater.inflate(R.menu.menu_donate, menu)
         return true
     }
 
@@ -66,7 +67,9 @@ class Donate : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_report -> true
+            R.id.action_report -> { startActivity(Intent(this, Report::class.java))
+                                    true
+                                    }
             else -> super.onOptionsItemSelected(item)
         }
     }

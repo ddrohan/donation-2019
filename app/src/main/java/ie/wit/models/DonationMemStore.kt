@@ -28,6 +28,7 @@ class DonationMemStore : DonationStore {
         }
 
         fun logAll() {
+            Log.v("Donate","** Donations List **")
             donations.forEach { Log.v("Donate","${it}") }
         }
     }
