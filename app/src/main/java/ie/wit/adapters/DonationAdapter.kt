@@ -32,7 +32,7 @@ class DonationAdapter constructor(private var donations: List<DonationModel>)
 
         fun bind(donation: DonationModel) {
             itemView.paymentamount.text = donation.amount.toString()
-            itemView.paymentmethod.text = donation.paymentmethod
+            itemView.paymentmethod.text = donation.paymenttype
             itemView.imageIcon.setImageResource(R.mipmap.ic_launcher_round)
         }
     }

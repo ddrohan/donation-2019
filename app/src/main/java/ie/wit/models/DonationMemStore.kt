@@ -10,7 +10,7 @@ internal fun getId(): Long {
 
 class DonationMemStore : DonationStore {
 
-        val donations = ArrayList<DonationModel>()
+        var donations = ArrayList<DonationModel>()
 
         override fun findAll(): List<DonationModel> {
             return donations
