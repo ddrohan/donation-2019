@@ -43,3 +43,4 @@ fun serviceAvailableMessage(activity: FragmentActivity) {
         Toast.LENGTH_LONG
     ).show()
 }
+

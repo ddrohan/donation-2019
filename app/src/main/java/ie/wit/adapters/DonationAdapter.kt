@@ -8,7 +8,7 @@ import ie.wit.R
 import ie.wit.models.DonationModel
 import kotlinx.android.synthetic.main.card_donation.view.*
 
-class DonationAdapter constructor(private var donations: List<DonationModel>)
+class DonationAdapter constructor(var donations: List<DonationModel>)
     : RecyclerView.Adapter<DonationAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {

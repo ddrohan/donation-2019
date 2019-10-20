@@ -33,5 +33,5 @@
     <string name="aboutus_title">Homer for President !!</string>
     <string name="aboutus_message">Hi, I\'m Homer\n\nPlease vote for me.\n\n Please Please Please Please!!</string>
 
-    <string name="messageLoading">Please Wait while the Donations are Loading...</string>
+    <string name="messageLoading">Please wait while we Connect to the Server...</string>
 </resources>

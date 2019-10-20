@@ -103,7 +103,7 @@ class DonateFragment : Fragment(), AnkoLogger, Callback<List<DonationModel>> {
     }
 
     fun getAllDonations() {
-        showLoader(loader, getString(R.string.messageLoading))
+        showLoader(loader, "Downloading Donations List")
         var callGetAll = app.donationService.getall()
         callGetAll.enqueue(this)
     }
