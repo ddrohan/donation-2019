@@ -113,7 +113,7 @@ class DonateFragment : Fragment(), AnkoLogger, Callback<List<DonationModel>> {
         // donationServiceAvailable = true
         serviceAvailableMessage(activity!!)
         info("Retrofit JSON = ${response.body()}")
-        app.donationsStore.donations = response.body() as ArrayList<DonationModel>
+        app.donations = response.body() as ArrayList<DonationModel>
         updateUI()
         hideLoader(loader)
     }
@@ -126,7 +126,7 @@ class DonateFragment : Fragment(), AnkoLogger, Callback<List<DonationModel>> {
     }
 
     fun updateUI() {
-        totalDonated = app.donationsStore.findAll().sumBy { it.amount }
+        totalDonated = app.donations.sumBy { it.amount }
         progressBar.progress = totalDonated
         totalSoFar.text = format("$ $totalDonated")
     }

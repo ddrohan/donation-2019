@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class DonationModel(var id: Long = 0,
+data class DonationModel(var _id: String = "N/A",
                          val paymenttype: String = "N/A",
                          val amount: Int = 0,
                          val message: String = "a message") : Parcelable
