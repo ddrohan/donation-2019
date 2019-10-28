@@ -60,7 +60,7 @@ class ReportFragment : Fragment(), AnkoLogger,
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val adapter = root.recyclerView.adapter as DonationAdapter
                 adapter.removeAt(viewHolder.adapterPosition)
-                deleteDonation(viewHolder.itemView.tag as String)
+                deleteDonation((viewHolder.itemView.tag as DonationModel)._id)
             }
         }
         val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
@@ -68,9 +68,7 @@ class ReportFragment : Fragment(), AnkoLogger,
 
         val swipeEditHandler = object : SwipeToEditCallback(activity!!) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val adapter = root.recyclerView.adapter as DonationAdapter
-                Toast.makeText(activity,"Editing",Toast.LENGTH_LONG).show()
-                adapter.removeAt(viewHolder.adapterPosition)
+                onDonationClick(viewHolder.itemView.tag as DonationModel)
             }
         }
         val itemTouchEditHelper = ItemTouchHelper(swipeEditHandler)
