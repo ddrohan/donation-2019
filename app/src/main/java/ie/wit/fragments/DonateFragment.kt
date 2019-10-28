@@ -79,7 +79,7 @@ class DonateFragment : Fragment(), AnkoLogger, Callback<List<DonationModel>> {
 
     fun addDonation(donation : DonationModel) {
         showLoader(loader, "Adding Donation to Server...")
-        var callAdd = app.donationService.post(donation)
+        var callAdd = app.donationService.post(app.auth.currentUser?.email,donation)
         callAdd.enqueue(object : Callback<DonationWrapper> {
             override fun onFailure(call: Call<DonationWrapper>, t: Throwable) {
                 info("Retrofit Error : $t.message")
@@ -104,7 +104,7 @@ class DonateFragment : Fragment(), AnkoLogger, Callback<List<DonationModel>> {
 
     fun getAllDonations() {
         showLoader(loader, "Downloading Donations List")
-        var callGetAll = app.donationService.getall()
+        var callGetAll = app.donationService.findall(app.auth.currentUser?.email)
         callGetAll.enqueue(this)
     }
 
