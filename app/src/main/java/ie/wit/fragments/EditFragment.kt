@@ -56,9 +56,9 @@ class EditFragment : Fragment(), Callback<DonationWrapper>, AnkoLogger {
         root.editUpdateButton.setOnClickListener {
             showLoader(loader, "Updating Donation on Server...")
             updateDonationData()
-            var callUpdate = app.donationService.put(app.auth.currentUser?.email,
-                (editDonation as DonationModel)._id ,editDonation as DonationModel)
-            callUpdate.enqueue(this)
+//            var callUpdate = app.donationService.put(app.auth.currentUser?.email,
+//                (editDonation as DonationModel)._id ,editDonation as DonationModel)
+//            callUpdate.enqueue(this)
         }
 
         return root

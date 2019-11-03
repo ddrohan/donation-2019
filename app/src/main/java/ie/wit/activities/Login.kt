@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.FirebaseDatabase
 //import com.google.firebase.quickstart.auth.R
 import ie.wit.R
 import ie.wit.main.DonationApp
@@ -43,22 +44,18 @@ class Login : AppCompatActivity(), View.OnClickListener {
         signOutButton.setOnClickListener(this)
         verifyEmailButton.setOnClickListener(this)
 
-        // [START initialize_auth]
-        // Initialize Firebase Auth
         app.auth = FirebaseAuth.getInstance()
-        // [END initialize_auth]
+        app.database = FirebaseDatabase.getInstance().reference
 
         loader = createLoader(this)
     }
 
-    // [START on_start_check_user]
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = app.auth.currentUser
         updateUI(currentUser)
     }
-    // [END on_start_check_user]
 
     private fun createAccount(email: String, password: String) {
         Log.d(TAG, "createAccount:$email")
@@ -67,7 +64,6 @@ class Login : AppCompatActivity(), View.OnClickListener {
         }
 
         showLoader(loader, "Creating Account...")
-
         // [START create_user_with_email]
         app.auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
@@ -83,7 +79,6 @@ class Login : AppCompatActivity(), View.OnClickListener {
                         Toast.LENGTH_SHORT).show()
                     updateUI(null)
                 }
-
                 // [START_EXCLUDE]
                 hideLoader(loader)
                 // [END_EXCLUDE]
@@ -96,9 +91,7 @@ class Login : AppCompatActivity(), View.OnClickListener {
         if (!validateForm()) {
             return
         }
-
         showLoader(loader, "Logging In...")
-
         // [START sign_in_with_email]
         app.auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
@@ -114,7 +107,6 @@ class Login : AppCompatActivity(), View.OnClickListener {
                         Toast.LENGTH_SHORT).show()
                     updateUI(null)
                 }
-
                 // [START_EXCLUDE]
                 if (!task.isSuccessful) {
                     status.setText(R.string.auth_failed)
