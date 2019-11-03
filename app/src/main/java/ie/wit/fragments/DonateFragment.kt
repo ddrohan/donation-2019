@@ -86,7 +86,9 @@ class DonateFragment : Fragment(), AnkoLogger {
 
     override fun onPause() {
         super.onPause()
-        app.database.child("user-donations").child(app.auth.currentUser!!.uid).removeEventListener(eventListener)
+        app.database.child("user-donations")
+                    .child(app.auth.currentUser!!.uid)
+                    .removeEventListener(eventListener)
     }
 
     fun writeNewDonation(donation: DonationModel) {

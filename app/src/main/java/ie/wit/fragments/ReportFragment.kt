@@ -54,7 +54,6 @@ class ReportFragment : Fragment(), AnkoLogger,
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val adapter = root.recyclerView.adapter as DonationAdapter
                 adapter.removeAt(viewHolder.adapterPosition)
-                //adapter.notifyDataSetChanged()
                 deleteDonation((viewHolder.itemView.tag as DonationModel).uid)
                 deleteUserDonation(app.auth.currentUser!!.uid,
                                   (viewHolder.itemView.tag as DonationModel).uid)
