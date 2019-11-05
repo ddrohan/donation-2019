@@ -16,7 +16,6 @@ import ie.wit.main.DonationApp
 import ie.wit.models.DonationModel
 import ie.wit.utils.createLoader
 import ie.wit.utils.hideLoader
-import ie.wit.utils.serviceUnavailableMessage
 import ie.wit.utils.showLoader
 import kotlinx.android.synthetic.main.fragment_edit.view.*
 import org.jetbrains.anko.AnkoLogger

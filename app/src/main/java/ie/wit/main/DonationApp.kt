@@ -3,13 +3,10 @@ package ie.wit.main
 import android.app.Application
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
-import ie.wit.models.DonationModel
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
 class DonationApp : Application(), AnkoLogger {
-
-    var donations = ArrayList<DonationModel>()
 
     lateinit var auth: FirebaseAuth
     lateinit var database: DatabaseReference

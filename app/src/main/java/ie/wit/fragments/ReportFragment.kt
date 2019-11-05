@@ -46,8 +46,6 @@ class ReportFragment : Fragment(), AnkoLogger,
         activity?.title = getString(R.string.action_report)
 
         root.recyclerView.setLayoutManager(LinearLayoutManager(activity))
-        root.recyclerView.adapter = DonationAdapter(app.donations,this)
-        loader = createLoader(activity!!)
         setSwipeRefresh()
 
         val swipeDeleteHandler = object : SwipeToDeleteCallback(activity!!) {
@@ -135,8 +133,9 @@ class ReportFragment : Fragment(), AnkoLogger,
     }
 
     fun getAllDonations(userId: String?) {
+        loader = createLoader(activity!!)
         showLoader(loader, "Downloading Donations from Firebase")
-        var donationsList = ArrayList<DonationModel>()
+        val donationsList = ArrayList<DonationModel>()
         app.database.child("user-donations").child(userId!!)
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
@@ -144,19 +143,18 @@ class ReportFragment : Fragment(), AnkoLogger,
                 }
 
                 override fun onDataChange(snapshot: DataSnapshot) {
-
-                    val children = snapshot!!.children
+                    hideLoader(loader)
+                    val children = snapshot.children
                     children.forEach {
-                        val donation = it.getValue<DonationModel>(DonationModel::class.java!!)
+                        val donation = it.getValue<DonationModel>(DonationModel::class.java)
 
                         donationsList.add(donation!!)
-                        //app.donations = donationsList
                         root.recyclerView.adapter =
                             DonationAdapter(donationsList, this@ReportFragment)
                         root.recyclerView.adapter?.notifyDataSetChanged()
                         checkSwipeRefresh()
-                        hideLoader(loader)
-                        app.database.child("user-donations").child(userId!!).removeEventListener(this)
+
+                        app.database.child("user-donations").child(userId).removeEventListener(this)
                     }
                 }
             })
