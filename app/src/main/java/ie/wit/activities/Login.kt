@@ -45,7 +45,6 @@ class Login : AppCompatActivity(), View.OnClickListener {
         verifyEmailButton.setOnClickListener(this)
 
         app.auth = FirebaseAuth.getInstance()
-        app.database = FirebaseDatabase.getInstance().reference
 
         loader = createLoader(this)
     }
@@ -184,6 +183,7 @@ class Login : AppCompatActivity(), View.OnClickListener {
             signedInButtons.visibility = View.VISIBLE
 
             verifyEmailButton.isEnabled = !user.isEmailVerified
+            app.database = FirebaseDatabase.getInstance().reference
             startActivity<Home>()
         } else {
             status.setText(R.string.signed_out)
