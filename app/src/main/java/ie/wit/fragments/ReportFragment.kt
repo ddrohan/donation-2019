@@ -99,7 +99,6 @@ class ReportFragment : Fragment(), AnkoLogger,
                     override fun onDataChange(snapshot: DataSnapshot) {
                         snapshot.ref.removeValue()
                     }
-
                     override fun onCancelled(error: DatabaseError) {
                         info("Firebase Donation error : ${error.message}")
                     }
@@ -146,7 +145,8 @@ class ReportFragment : Fragment(), AnkoLogger,
                     hideLoader(loader)
                     val children = snapshot.children
                     children.forEach {
-                        val donation = it.getValue<DonationModel>(DonationModel::class.java)
+                        val donation = it.
+                            getValue<DonationModel>(DonationModel::class.java)
 
                         donationsList.add(donation!!)
                         root.recyclerView.adapter =
@@ -154,7 +154,8 @@ class ReportFragment : Fragment(), AnkoLogger,
                         root.recyclerView.adapter?.notifyDataSetChanged()
                         checkSwipeRefresh()
 
-                        app.database.child("user-donations").child(userId).removeEventListener(this)
+                        app.database.child("user-donations").child(userId)
+                            .removeEventListener(this)
                     }
                 }
             })

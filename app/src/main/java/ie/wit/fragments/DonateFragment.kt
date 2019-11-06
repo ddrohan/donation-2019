@@ -113,7 +113,6 @@ class DonateFragment : Fragment(), AnkoLogger {
     }
 
     fun getTotalDonated(userId: String?) {
-
         eventListener = object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 info("Firebase Donation error : ${error.message}")
@@ -121,9 +120,9 @@ class DonateFragment : Fragment(), AnkoLogger {
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 totalDonated = 0
-                val children = snapshot!!.children
+                val children = snapshot.children
                 children.forEach {
-                    val donation = it.getValue<DonationModel>(DonationModel::class.java!!)
+                    val donation = it.getValue<DonationModel>(DonationModel::class.java)
                     totalDonated += donation!!.amount
                 }
                 progressBar.progress = totalDonated
