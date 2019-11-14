@@ -53,6 +53,7 @@ class Home : AppCompatActivity(),
 
         navView.getHeaderView(0).nav_header_email.text = app.auth.currentUser?.email
 
+        //Checking if Google User, upload google profile pic
         if (app.auth.currentUser?.photoUrl != null) {
             navView.getHeaderView(0).nav_header_name.text = app.auth.currentUser?.displayName
             Picasso.get().load(app.auth.currentUser?.photoUrl)
@@ -66,6 +67,8 @@ class Home : AppCompatActivity(),
                     override fun onError(e: Exception) {}
                 })
         }
+        else // Regular User, upload default pic of homer
+            uploadImageView(app,navView.getHeaderView(0).imageView)
 
         ft = supportFragmentManager.beginTransaction()
 

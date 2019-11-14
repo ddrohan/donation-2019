@@ -3,9 +3,12 @@ package ie.wit.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import ie.wit.R
 import ie.wit.models.DonationModel
+import jp.wasabeef.picasso.transformations.CropCircleTransformation
 import kotlinx.android.synthetic.main.card_donation.view.*
 
 interface DonationListener {
@@ -49,6 +52,13 @@ class DonationAdapter constructor(var donations: ArrayList<DonationModel>,
 
             if(!reportAll)
                 itemView.setOnClickListener { listener.onDonationClick(donation) }
+
+            if(!donation.profilepic.isEmpty()) {
+                Picasso.get().load(donation.profilepic.toUri())
+                    //.resize(180, 180)
+                    .transform(CropCircleTransformation())
+                    .into(itemView.imageIcon)
+            }
             else
                 itemView.imageIcon.setImageResource(R.mipmap.ic_launcher_homer_round)
         }

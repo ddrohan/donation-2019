@@ -1,15 +1,22 @@
 package ie.wit.utils
 
 import android.graphics.Bitmap
+import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.tasks.OnFailureListener
+import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
 import ie.wit.R
 import ie.wit.main.DonationApp
+import jp.wasabeef.picasso.transformations.CropCircleTransformation
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
@@ -38,31 +45,46 @@ fun hideLoader(loader: AlertDialog) {
 
 fun uploadImageView(app: DonationApp, imageView: ImageView) {
     // Get the data from an ImageView as bytes
+
+    lateinit var bitmap: Bitmap
+
     val uid = app.auth.currentUser!!.uid
     val imageRef = app.storage.child("photos").child("${uid}.jpg")
-    val bitmap = (imageView.drawable as BitmapDrawable).bitmap
-    val baos = ByteArrayOutputStream()
 
+    if(imageView is AdaptiveIconDrawable || imageView is AppCompatImageView)
+        bitmap = imageView.drawable.toBitmap()
+    else
+        bitmap = (imageView.drawable as BitmapDrawable).toBitmap()
+
+    val baos = ByteArrayOutputStream()
     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
     val data = baos.toByteArray()
 
     var uploadTask = imageRef.putBytes(data)
-//    uploadTask.addOnFailureListener { object : OnFailureListener {
-//        override fun onFailure(error: Exception) {
-//            Log.v("Donation", "uploadTask.exception" + error)
-//        }
-//    }
-//    }.addOnSuccessListener {
-//        uploadTask.continueWithTask { task -> imageRef.downloadUrl
-//        }.addOnCompleteListener { task ->
-//            if (task.isSuccessful) {
-//                val downloadUri = task.result
-//
-//                val url = downloadUri!!.toString()
-//                Log.v("Donation", "uploadTask url" + url)
-//                Log.v("seeThisUri", downloadUri.toString())// This is the one you should store
-//            }
-//        }
-//    }
-}
+    uploadTask.addOnFailureListener { object : OnFailureListener {
+        override fun onFailure(error: Exception) {
+            Log.v("Donation", "uploadTask.exception" + error)
+        }
+    }
+    }.addOnSuccessListener {
+        uploadTask.continueWithTask { task ->
+            imageRef.downloadUrl
+        }.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val downloadUri = task.result
+                val url = downloadUri!!.toString()
+                app.userImage = url.toUri()
 
+                Picasso.get().load(app.userImage)
+                    .resize(180, 180)
+                    .transform(CropCircleTransformation())
+                    .into(imageView, object : Callback {
+                        override fun onSuccess() {
+                            // Drawable is ready
+                        }
+                        override fun onError(e: Exception) {}
+                    })
+            }
+        }
+    }
+}
