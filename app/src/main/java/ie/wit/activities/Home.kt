@@ -11,12 +11,15 @@ import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.FirebaseDatabase
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import ie.wit.R
 import ie.wit.fragments.AboutUsFragment
 import ie.wit.fragments.DonateFragment
+import ie.wit.fragments.ReportAllFragment
 import ie.wit.fragments.ReportFragment
 import ie.wit.main.DonationApp
+import ie.wit.utils.uploadImageView
 import jp.wasabeef.picasso.transformations.CropCircleTransformation
 import kotlinx.android.synthetic.main.app_bar_home.*
 import kotlinx.android.synthetic.main.home.*
@@ -55,7 +58,13 @@ class Home : AppCompatActivity(),
             Picasso.get().load(app.auth.currentUser?.photoUrl)
                 .resize(180, 180)
                 .transform(CropCircleTransformation())
-                .into(navView.getHeaderView(0).imageView)
+                .into(navView.getHeaderView(0).imageView, object : Callback {
+                    override fun onSuccess() {
+                        // Drawable is ready
+                        uploadImageView(app,navView.getHeaderView(0).imageView)
+                    }
+                    override fun onError(e: Exception) {}
+                })
         }
 
         ft = supportFragmentManager.beginTransaction()
@@ -72,6 +81,8 @@ class Home : AppCompatActivity(),
                 navigateTo(DonateFragment.newInstance())
             R.id.nav_report ->
                 navigateTo(ReportFragment.newInstance())
+            R.id.nav_report_all ->
+                navigateTo(ReportAllFragment.newInstance())
             R.id.nav_aboutus ->
                 navigateTo(AboutUsFragment.newInstance())
             R.id.nav_sign_out -> signOut()

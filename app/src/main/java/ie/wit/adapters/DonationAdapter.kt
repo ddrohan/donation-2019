@@ -13,8 +13,10 @@ interface DonationListener {
 }
 
 class DonationAdapter constructor(var donations: ArrayList<DonationModel>,
-                                  private val listener: DonationListener)
+                                  private val listener: DonationListener, reportall : Boolean)
     : RecyclerView.Adapter<DonationAdapter.MainHolder>() {
+
+    val reportAll = reportall
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
         return MainHolder(
@@ -28,7 +30,7 @@ class DonationAdapter constructor(var donations: ArrayList<DonationModel>,
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
         val donation = donations[holder.adapterPosition]
-        holder.bind(donation,listener)
+        holder.bind(donation,listener,reportAll)
     }
 
     override fun getItemCount(): Int = donations.size
@@ -40,12 +42,15 @@ class DonationAdapter constructor(var donations: ArrayList<DonationModel>,
 
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(donation: DonationModel, listener: DonationListener) {
+        fun bind(donation: DonationModel, listener: DonationListener, reportAll: Boolean) {
             itemView.tag = donation
             itemView.paymentamount.text = donation.amount.toString()
             itemView.paymentmethod.text = donation.paymenttype
-            itemView.imageIcon.setImageResource(R.mipmap.ic_launcher_round)
-            itemView.setOnClickListener { listener.onDonationClick(donation) }
+
+            if(!reportAll)
+                itemView.setOnClickListener { listener.onDonationClick(donation) }
+            else
+                itemView.imageIcon.setImageResource(R.mipmap.ic_launcher_homer_round)
         }
     }
 }
