@@ -1,5 +1,6 @@
 package ie.wit.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -19,7 +20,7 @@ import ie.wit.fragments.DonateFragment
 import ie.wit.fragments.ReportAllFragment
 import ie.wit.fragments.ReportFragment
 import ie.wit.main.DonationApp
-import ie.wit.utils.uploadImageView
+import ie.wit.utils.*
 import jp.wasabeef.picasso.transformations.CropCircleTransformation
 import kotlinx.android.synthetic.main.app_bar_home.*
 import kotlinx.android.synthetic.main.home.*
@@ -54,21 +55,10 @@ class Home : AppCompatActivity(),
         navView.getHeaderView(0).nav_header_email.text = app.auth.currentUser?.email
 
         //Checking if Google User, upload google profile pic
-        if (app.auth.currentUser?.photoUrl != null) {
-            navView.getHeaderView(0).nav_header_name.text = app.auth.currentUser?.displayName
-            Picasso.get().load(app.auth.currentUser?.photoUrl)
-                .resize(180, 180)
-                .transform(CropCircleTransformation())
-                .into(navView.getHeaderView(0).imageView, object : Callback {
-                    override fun onSuccess() {
-                        // Drawable is ready
-                        uploadImageView(app,navView.getHeaderView(0).imageView)
-                    }
-                    override fun onError(e: Exception) {}
-                })
-        }
-        else // Regular User, upload default pic of homer
-            uploadImageView(app,navView.getHeaderView(0).imageView)
+        checkExistingPhoto(app,this)
+
+        navView.getHeaderView(0).imageView
+            .setOnClickListener { showImagePicker(this,1) }
 
         ft = supportFragmentManager.beginTransaction()
 
@@ -129,6 +119,27 @@ class Home : AppCompatActivity(),
             app.auth.signOut()
             startActivity<Login>()
             finish()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            1 -> {
+                if (data != null) {
+                    writeImageRef(app,readImageUri(resultCode, data).toString())
+                    Picasso.get().load(readImageUri(resultCode, data).toString())
+                        .resize(180, 180)
+                        .transform(CropCircleTransformation())
+                        .into(navView.getHeaderView(0).imageView, object : Callback {
+                            override fun onSuccess() {
+                                // Drawable is ready
+                                uploadImageView(app,navView.getHeaderView(0).imageView)
+                            }
+                            override fun onError(e: Exception) {}
+                        })
+                }
+            }
         }
     }
 }
