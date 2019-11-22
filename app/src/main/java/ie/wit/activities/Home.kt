@@ -15,10 +15,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import ie.wit.R
-import ie.wit.fragments.AboutUsFragment
-import ie.wit.fragments.DonateFragment
-import ie.wit.fragments.ReportAllFragment
-import ie.wit.fragments.ReportFragment
+import ie.wit.fragments.*
 import ie.wit.main.DonationApp
 import ie.wit.utils.*
 import jp.wasabeef.picasso.transformations.CropCircleTransformation
@@ -55,6 +52,7 @@ class Home : AppCompatActivity(),
         navView.getHeaderView(0).nav_header_email.text = app.auth.currentUser?.email
 
         //Checking if Google User, upload google profile pic
+
         checkExistingPhoto(app,this)
 
         navView.getHeaderView(0).imageView
@@ -78,6 +76,8 @@ class Home : AppCompatActivity(),
                 navigateTo(ReportAllFragment.newInstance())
             R.id.nav_aboutus ->
                 navigateTo(AboutUsFragment.newInstance())
+            R.id.nav_favourites ->
+                navigateTo(FavouritesFragment.newInstance())
             R.id.nav_sign_out -> signOut()
 
             else -> toast("You Selected Something Else")
