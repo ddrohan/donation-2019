@@ -1,14 +1,18 @@
 package ie.wit.activities
 
 import android.content.Intent
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.FirebaseDatabase
@@ -31,16 +35,13 @@ class Home : AppCompatActivity(),
 
     lateinit var ft: FragmentTransaction
     lateinit var app: DonationApp
+    lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home)
         setSupportActionBar(toolbar)
         app = application as DonationApp
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action",
-                Snackbar.LENGTH_LONG).setAction("Action", null).show()
-        }
 
         navView.setNavigationItemSelectedListener(this)
         val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar,
@@ -60,9 +61,18 @@ class Home : AppCompatActivity(),
 
         ft = supportFragmentManager.beginTransaction()
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location : Location? ->
+                app.currentLocation = location!!
+            }
+
         val fragment = DonateFragment.newInstance()
         ft.replace(R.id.homeFrame, fragment)
         ft.commit()
+
+
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

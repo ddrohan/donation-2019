@@ -1,6 +1,7 @@
 package ie.wit.main
 
 import android.app.Application
+import android.location.Location
 import android.net.Uri
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
@@ -16,6 +17,7 @@ class DonationApp : Application(), AnkoLogger {
     lateinit var googleSignInClient: GoogleSignInClient
     lateinit var storage: StorageReference
     lateinit var userImage: Uri
+    lateinit var currentLocation : Location
 
     override fun onCreate() {
         super.onCreate()

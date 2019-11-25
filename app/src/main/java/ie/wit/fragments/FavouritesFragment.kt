@@ -6,21 +6,38 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 
 import ie.wit.R
+import ie.wit.main.DonationApp
 
-class FavouritesFragment : Fragment() {
+class FavouritesFragment : SupportMapFragment(), OnMapReadyCallback {
+
+    private lateinit var mMap: GoogleMap
+    lateinit var app: DonationApp
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        app = activity?.application as DonationApp
+        getMapAsync(this)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         activity?.title = getString(R.string.favourites_title)
-        return inflater.inflate(R.layout.fragment_favourites, container, false)
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+
+        val wit = LatLng(52.245696, -7.139102)
+        mMap.addMarker(MarkerOptions().position(wit).title("Marker in Waterford"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(wit, 14f))
     }
 
     companion object {
