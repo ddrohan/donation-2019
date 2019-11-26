@@ -35,7 +35,7 @@ class Home : AppCompatActivity(),
 
     lateinit var ft: FragmentTransaction
     lateinit var app: DonationApp
-    lateinit var fusedLocationClient: FusedLocationProviderClient
+    //lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +52,7 @@ class Home : AppCompatActivity(),
 
         if(checkLocationPermissions(this)) {
             // todo get the current location
+            setCurrentLocation(app)
         }
 
         navView.setNavigationItemSelectedListener(this)
@@ -71,13 +72,6 @@ class Home : AppCompatActivity(),
             .setOnClickListener { showImagePicker(this,1) }
 
         ft = supportFragmentManager.beginTransaction()
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location : Location? ->
-                app.currentLocation = location!!
-            }
 
         val fragment = DonateFragment.newInstance()
         ft.replace(R.id.homeFrame, fragment)
@@ -167,7 +161,7 @@ class Home : AppCompatActivity(),
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (isPermissionGranted(requestCode, grantResults)) {
             // todo get the current location
-            //setCurrentLocation(app)
+            setCurrentLocation(app)
         } else {
             // permissions denied, so use the default location
             app.currentLocation = Location("Default").apply {

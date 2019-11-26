@@ -3,8 +3,10 @@ package ie.wit.utils
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
+import android.location.Location
 import android.util.Log
 import androidx.core.app.ActivityCompat
+import ie.wit.main.DonationApp
 
 val REQUEST_PERMISSIONS_REQUEST_CODE = 34
 
@@ -31,4 +33,11 @@ fun isPermissionGranted(code: Int, grantResults: IntArray): Boolean {
         }
     }
     return permissionGranted
+}
+
+fun setCurrentLocation(app: DonationApp) {
+    app.locationClient.lastLocation
+        .addOnSuccessListener { location : Location? ->
+            app.currentLocation = location!!
+        }
 }
