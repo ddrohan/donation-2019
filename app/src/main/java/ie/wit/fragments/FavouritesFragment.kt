@@ -2,6 +2,7 @@ package ie.wit.fragments
 
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -34,10 +35,11 @@ class FavouritesFragment : SupportMapFragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        Log.v("Donation", "onMapReady LAT: ${app.currentLocation.latitude} LNG: ${app.currentLocation.longitude}")
 
-        val wit = LatLng(52.245696, -7.139102)
-        mMap.addMarker(MarkerOptions().position(wit).title("Marker in Waterford"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(wit, 14f))
+        val pos = LatLng(app.currentLocation.latitude,app.currentLocation.longitude)
+        mMap.addMarker(MarkerOptions().position(pos).title("Marker at Current Location"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 14f))
     }
 
     companion object {

@@ -43,6 +43,17 @@ class Home : AppCompatActivity(),
         setSupportActionBar(toolbar)
         app = application as DonationApp
 
+//        app.currentLocation = Location("Default").apply {
+//            latitude = 52.245696
+//            longitude = -7.139102
+//        }
+
+        app.locationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        if(checkLocationPermissions(this)) {
+            // todo get the current location
+        }
+
         navView.setNavigationItemSelectedListener(this)
         val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar,
             R.string.navigation_drawer_open, R.string.navigation_drawer_close
@@ -151,5 +162,19 @@ class Home : AppCompatActivity(),
                 }
             }
         }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (isPermissionGranted(requestCode, grantResults)) {
+            // todo get the current location
+            //setCurrentLocation(app)
+        } else {
+            // permissions denied, so use the default location
+            app.currentLocation = Location("Default").apply {
+                latitude = 52.245696
+                longitude = -7.139102
+            }
+        }
+        Log.v("Donation", "Home LAT: ${app.currentLocation.latitude} LNG: ${app.currentLocation.longitude}")
     }
 }
