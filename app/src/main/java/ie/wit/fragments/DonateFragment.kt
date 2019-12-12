@@ -83,6 +83,7 @@ class DonateFragment : Fragment(), AnkoLogger {
     override fun onResume() {
         super.onResume()
         getTotalDonated(app.auth.currentUser?.uid)
+        trackLocation(app,null)
     }
 
     override fun onPause() {

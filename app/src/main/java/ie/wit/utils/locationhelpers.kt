@@ -1,11 +1,20 @@
 package ie.wit.utils
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.location.Location
 import android.util.Log
 import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import ie.wit.main.DonationApp
 
 val REQUEST_PERMISSIONS_REQUEST_CODE = 34
@@ -35,9 +44,48 @@ fun isPermissionGranted(code: Int, grantResults: IntArray): Boolean {
     return permissionGranted
 }
 
+@SuppressLint("MissingPermission")
 fun setCurrentLocation(app: DonationApp) {
     app.locationClient.lastLocation
         .addOnSuccessListener { location : Location? ->
             app.currentLocation = location!!
         }
+}
+
+@SuppressLint("RestrictedApi")
+fun createDefaultLocationRequest() : LocationRequest {
+    val locationRequest = LocationRequest().apply {
+        interval = 5000
+        fastestInterval = 2000
+        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+    }
+    return locationRequest
+}
+
+@SuppressLint("MissingPermission")
+fun trackLocation(app: DonationApp, map: GoogleMap?) {
+    val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult?) {
+            if (locationResult != null) {
+                app.currentLocation = locationResult.locations.last()
+                if (map != null) setMapMarker(app,map)
+            }
+        }
+    }
+
+    app.locationClient.requestLocationUpdates(createDefaultLocationRequest(),
+        locationCallback, null)
+}
+
+fun setMapMarker(app: DonationApp,map: GoogleMap) {
+    val pos = LatLng(app.currentLocation.latitude,
+        app.currentLocation.longitude)
+    map.clear()
+    map.addMarker(
+        MarkerOptions().position(pos)
+            .title("My Current Location")
+            .snippet("This is Me!")
+            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+    )
+    map.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 14f))
 }

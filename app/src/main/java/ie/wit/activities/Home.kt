@@ -35,7 +35,6 @@ class Home : AppCompatActivity(),
 
     lateinit var ft: FragmentTransaction
     lateinit var app: DonationApp
-    //lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -163,7 +162,7 @@ class Home : AppCompatActivity(),
             // todo get the current location
             setCurrentLocation(app)
         } else {
-            // permissions denied, so use the default location
+            // permissions denied, so use a default location
             app.currentLocation = Location("Default").apply {
                 latitude = 52.245696
                 longitude = -7.139102

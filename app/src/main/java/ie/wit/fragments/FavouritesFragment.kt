@@ -16,6 +16,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 import ie.wit.R
 import ie.wit.main.DonationApp
+import ie.wit.utils.setMapMarker
+import ie.wit.utils.trackLocation
 
 class FavouritesFragment : SupportMapFragment(), OnMapReadyCallback {
 
@@ -35,12 +37,10 @@ class FavouritesFragment : SupportMapFragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        Log.v("Donation", "onMapReady LAT: ${app.currentLocation.latitude} LNG: ${app.currentLocation.longitude}")
-
-        val pos = LatLng(app.currentLocation.latitude,app.currentLocation.longitude)
-        mMap.addMarker(MarkerOptions().position(pos).title("Marker at Current Location"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 14f))
+        mMap.isMyLocationEnabled = true
+        trackLocation(app,mMap)
     }
+
 
     companion object {
         @JvmStatic
